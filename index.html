@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Blockchain Tracking System</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #0b0f1a;
+  color: white;
+  text-align: center;
+}
+
+/* 404 Background */
+body::before {
+  content: "404";
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 250px;
+  color: rgba(255,255,255,0.03);
+  z-index: 0;
+}
+
+.container {
+  position: relative;
+  z-index: 1;
+  padding: 40px;
+}
+
+/* Screens */
+.screen {
+  display: none;
+}
+
+.active {
+  display: block;
+}
+
+/* Button */
+button {
+  padding: 12px 25px;
+  border: none;
+  background: #00c3ff;
+  color: black;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+/* Loading Spinner */
+.loader {
+  border: 6px solid #222;
+  border-top: 6px solid #00c3ff;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  margin: 30px auto;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  100% { transform: rotate(360deg); }
+}
+
+/* Result Card */
+.card {
+  background: rgba(255,255,255,0.05);
+  padding: 20px;
+  border-radius: 10px;
+  display: inline-block;
+}
+
+img {
+  width: 120px;
+  border-radius: 10px;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+  <!-- 1. ERROR SCREEN -->
+  <div id="errorScreen" class="screen active">
+    <h1>404 ERROR</h1>
+    <p>System Access Restricted...</p>
+    <p>Initializing Secure Network...</p>
+  </div>
+
+  <!-- 2. TRACK SCREEN -->
+  <div id="trackScreen" class="screen">
+    <h1>Secure Tracking System</h1>
+    <p>Enter Wallet Address</p>
+
+    <input id="wallet" type="text" placeholder="0x123..." style="padding:10px; width:250px;">
+    <br><br>
+
+    <button onclick="startTracking()">TRACK</button>
+  </div>
+
+  <!-- 3. LOADING SCREEN -->
+  <div id="loadingScreen" class="screen">
+    <h2>Scanning Blockchain...</h2>
+    <div class="loader"></div>
+    <p>Locating Target...</p>
+  </div>
+
+  <!-- 4. RESULT SCREEN -->
+  <div id="resultScreen" class="screen">
+    <h1>Target Identified</h1>
+
+    <div class="card">
+      <img id="profileImg" src="">
+      <p id="name"></p>
+      <p id="risk"></p>
+      <p id="status"></p>
+      <p id="walletDisplay"></p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+
+/* Step 1: Show error then move to track */
+setTimeout(() => {
+  switchScreen("trackScreen");
+}, 3000);
+
+
+/* Function to switch screens */
+function switchScreen(id) {
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+}
+
+
+/* Start tracking */
+function startTracking() {
+  const wallet = document.getElementById("wallet").value;
+
+  if(wallet === "") {
+    alert("Enter wallet address");
+    return;
+  }
+
+  switchScreen("loadingScreen");
+
+  setTimeout(() => {
+    showResult(wallet);
+  }, 3000);
+}
+
+
+/* Show fake result */
+function showResult(wallet) {
+
+  const profiles = [
+    {
+      name: "Unknown Entity",
+      img: "https://i.pravatar.cc/150?img=3"
+    },
+    {
+      name: "Suspicious Wallet",
+      img: "https://i.pravatar.cc/150?img=5"
+    },
+    {
+      name: "High Risk User",
+      img: "https://i.pravatar.cc/150?img=8"
+    }
+  ];
+
+  const random = profiles[Math.floor(Math.random() * profiles.length)];
+
+  document.getElementById("profileImg").src = random.img;
+  document.getElementById("name").innerText = "Name: " + random.name;
+  document.getElementById("risk").innerText = "Risk Score: " + Math.floor(Math.random()*100) + "%";
+  document.getElementById("status").innerText = "Status: Flagged Activity Detected";
+  document.getElementById("walletDisplay").innerText = "Wallet: " + wallet;
+
+  switchScreen("resultScreen");
+}
+
+</script>
+
+</body>
+</html>
